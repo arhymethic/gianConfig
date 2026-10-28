@@ -7,10 +7,11 @@ G21                                          ; Work in millimetres
 G90                                          ; Send absolute coordinates...
 M83                                          ; ...but relative extruder moves
 M555 P2                                      ; Set firmware compatibility to look like Marlin
-M667 S1                                      ; Select CoreXY mode
+M669 K1                                      ; Select CoreXY kinematics
 
 ; Network
-M550 P"ToolChanger"                          ; Set machine name
+M550 P"Gian"                                 ; Set machine name
+M551 P"giankapassword"                       ; Set machine password
 M552 S1                                      ; Enable Networking
 M586 P0 S1                                   ; Enable HTTP
 M586 P1 S0                                   ; Disable FTP

@@ -15,7 +15,8 @@ G91                             ; Relative positioning
 G1 H2 Z5 F5000
 
 ; Move fast towards Z endstop until triggered
-G1 H1 Z-500 F1800
+var maxTravel = move.axes[2].max - move.axes[2].min + 5 ; calculate how far Z can travel plus 5mm
+G1 H1 Z{-var.maxTravel} F1800
 
 ; Back off 5mm
 G1 Z5 F3000
