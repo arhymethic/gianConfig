@@ -12,10 +12,10 @@ G90 ; absolute positioning
 var xTravel = move.axes[0].max - move.axes[0].min + 5 ; calculate how far X can travel plus 5mm
 var yTravel = move.axes[1].max - move.axes[1].min + 5 ; calculate how far Y can travel plus 5mm
 G91 ; relative positioning
-G1 H1 X{-var.xTravel} Y{-var.yTravel} F2400 ; home both
 G1 H1 X{-var.xTravel} F2400 ; home in the -X direction
+G1 X5 F6000 ; move back 5mm
 G1 H1 Y{-var.yTravel} F2400 ; home in the -Y direction
-G1 X5 Y5 F6000 ; move back 5mm
+G1 Y5 F6000 ; move back 5mm
 G90 ; absolute positioning
 
 ; home Z

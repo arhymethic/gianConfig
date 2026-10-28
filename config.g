@@ -18,14 +18,14 @@ M552 S1 ; configure WiFi adapter
 M586 P0 S1 ; configure HTTP
 
 ; Smart Drivers
-M569 P1 S0 D2 ; driver 1 goes backwards (Y axis)
-M569 P2 S0 D2 ; driver 2 goes backwards (Z axis)
-M569 P3 S0 D2 ; driver 3 goes backwards (X axis)
-M569 P4 S1 D2 ; driver 4 goes forwards (extruder 0)
-M569 P5 S1 D2 ; driver 5 goes forwards (extruder 1)
-M569 P6 S1 D2 ; driver 6 goes forwards (extruder 2)
-M569 P7 S1 D2 ; driver 7 goes forwards (C axis)
-M569 P8 S1 D2 ; driver 8 goes forwards (extruder 3)
+M569 P1 S1 ; driver 1 goes forwards (Y axis)
+M569 P2 S1 ; driver 2 goes forwards (Z axis)
+M569 P3 S1 ; driver 3 goes forwards (X axis)
+M569 P4 S0 ; driver 4 goes backwards (extruder 0)
+M569 P5 S0 ; driver 5 goes backwards (extruder 1)
+M569 P6 S0 ; driver 6 goes backwards (extruder 2)
+M569 P7 S0 ; driver 7 goes backwards (C axis)
+M569 P8 S0 ; driver 8 goes backwards (extruder 3)
 
 ; Motor Idle Current Reduction
 M906 I30 T30 ; set motor current idle factor and idle timeout
