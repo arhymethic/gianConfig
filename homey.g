@@ -11,9 +11,8 @@ G90 ; absolute positioning
 ; home Y
 G91 ; relative positioning
 var maxTravel = move.axes[1].max - move.axes[1].min + 5 ; calculate how far Y can travel plus 5mm
-G1 H1 Y{-var.maxTravel} F600 ; coarse home in the -Y direction
+G1 H1 Y{-var.maxTravel} F2400 ; home in the -Y direction
 G1 Y5 F6000 ; move back 5mm
-G1 H1 Y{-var.maxTravel} F300 ; fine home in the -Y direction
 G90 ; absolute positioning
 
 ; decrease Z again

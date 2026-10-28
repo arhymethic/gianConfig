@@ -7,7 +7,7 @@
 G90 ; absolute coordinates
 M83 ; relative extruder moves
 M550 P"Gian" ; set hostname
-M911 S19.8 R22 P"M913 X0 Y0 G91 M83 G1 Z3 E-5 F1000" ; set voltage thresholds and actions to run on power loss
+; M911 S19.8 R22 P"M913 X0 Y0 G91 M83 G1 Z3 E-5 F1000" ; set voltage thresholds and actions to run on power loss (disabled to match config.g)
 
 ; Accessories
 M575 P1 S0 B57600 ; configure PanelDue support
@@ -34,19 +34,20 @@ M906 I30 T30 ; set motor current idle factor and idle timeout
 M584 X3 Y1 Z2 C7 ; set axis mapping
 M350 X16 Y16 Z16 C16 I1 ; configure microstepping with interpolation
 M906 X1800 Y1800 Z1630 C500 ; set axis driver currents
-M92 X6.67 Y6.67 Z0.067 C0.033 ; configure steps per mm
+M92 X160 Y160 Z1600 C91.022 ; configure steps per mm
 M208 X-42:528.5 Y-49:555 Z0:500 C-45:360 ; set minimum and maximum axis limits
-M566 X3499.7999999999997 Y3499.7999999999997 Z12 C900 ; set maximum instantaneous speed changes (mm/min)
-M203 X34980 Y34980 Z600 C4980 ; set maximum speeds (mm/min)
+M566 X400 Y400 Z12 C2 ; set maximum instantaneous speed changes (mm/min)
+M203 X35000 Y35000 Z600 C5000 ; set maximum speeds (mm/min)
 M201 X6000 Y6000 Z200 C500 ; set accelerations (mm/s^2)
+M564 H0 S1 ; Allow axis movement before homing, enforce limits when homed
 
 ; Extruders
 M584 E4:5:6:8 ; set extruder mapping
 M350 E16:16:16:16 I1 ; configure microstepping with interpolation
 M906 E1000:1000:1000:1000 ; set extruder driver currents
 M92 E834:834:834:834 ; configure steps per mm
-M566 E1.98:1.98:1.98:1.98 ; set maximum instantaneous speed changes (mm/min)
-M203 E4999.8:4999.8:4999.8:4999.8 ; set maximum speeds (mm/min)
+M566 E120:120:120:120 ; set maximum instantaneous speed changes (mm/min)
+M203 E5000:5000:5000:5000 ; set maximum speeds (mm/min)
 M201 E2500:2500:2500:2500 ; set accelerations (mm/s^2)
 
 ; Kinematics
@@ -58,32 +59,35 @@ M574 Y1 S3 ; configure Y axis endstop
 M574 Z1 P"zstop" S1 ; configure Z axis endstop
 M574 C0 ; configure C axis endstop
 
+; Stall Detection
+M915 X Y S3 F0 H400 R0 ; X / Y Axes sensitivity
+
 ; Mesh Bed Compensation
 M557 X-17:503.5 Y-24:530 S40:40 ; define grid for mesh bed compensation
 
 ; Sensors
-M308 S0 P"bedtemp" Y"thermistor" A"Heated Bed" T100000 B4725 ; configure sensor #0
-M308 S1 P"e0temp" Y"thermistor" A"Nozzle" T100000 B4725 C7.06e-8 ; configure sensor #1
-M308 S2 P"e1temp" Y"thermistor" T100000 B4725 C7.06e-8 ; configure sensor #2
-M308 S3 P"duex.e2temp" Y"thermistor" T100000 B4725 C7.06e-8 ; configure sensor #3
-M308 S4 P"duex.e3temp" Y"thermistor" T100000 B4725 C7.06e-8 ; configure sensor #4
+M308 S0 P"bedtemp" Y"thermistor" A"Bed" T100000 B4138 C0 ; configure sensor #0
+M308 S1 P"e0temp" Y"thermistor" A"T0" T100000 B4725 C7.06e-8 ; configure sensor #1
+M308 S2 P"e1temp" Y"thermistor" A"T1" T100000 B4725 C7.06e-8 ; configure sensor #2
+M308 S3 P"duex.e2temp" Y"thermistor" A"T2" T100000 B4725 C7.06e-8 R2200 ; configure sensor #3
+M308 S4 P"duex.e3temp" Y"thermistor" A"T3" T100000 B4725 C7.06e-8 R2200 ; configure sensor #4
 
-; Heaters
+; Heaters & Tuned PID Models
 M950 H0 C"bedheat" T0 ; create heater #0
-M143 H0 P0 T0 C0 S225 A0 ; configure heater monitor #0 for heater #0
-M307 H0 R2.43 D5.5 E1.35 K0.56 B1 ; configure model of heater #0
+M143 H0 S125 ; Limit bed to 125C
+M307 H0 R0.129 C700.000 D10.00 S1.00 V0.0 B1 ; Tuned Bed model
 M950 H1 C"e0heat" T1 ; create heater #1
-M143 H1 P0 T1 C0 S305 A0 ; configure heater monitor #0 for heater #1
-M307 H1 R2.43 D5.5 E1.35 K0.56 B0 ; configure model of heater #1
-M950 H2 C"e1heat" T1 ; create heater #2
-M143 H2 P0 T1 C0 S305 A0 ; configure heater monitor #0 for heater #2
-M307 H2 R2.43 D5.5 E1.35 K0.56 B0 ; configure model of heater #2
-M950 H3 C"duex.e2heat" T1 ; create heater #3
-M143 H3 P0 T1 C0 S305 A0 ; configure heater monitor #0 for heater #3
-M307 H3 R2.43 D5.5 E1.35 K0.56 B0 ; configure model of heater #3
-M950 H4 C"duex.e3heat" T1 ; create heater #4
-M143 H4 P0 T1 C0 S305 A0 ; configure heater monitor #0 for heater #4
-M307 H4 R2.43 D5.5 E1.35 K0.56 B0 ; configure model of heater #4
+M143 H1 S305 ; Limit T0 to 305C
+M307 H1 R4.662 C48.400 D1.85 S1.00 V23.9 B0 ; Tuned T0 PID model
+M950 H2 C"e1heat" T2 ; create heater #2
+M143 H2 S305 ; Limit T1 to 305C
+M307 H2 R5.005 C158.104 D2.80 S1.00 V23.9 B0 ; Tuned T1 PID model
+M950 H3 C"duex.e2heat" T3 ; create heater #3
+M143 H3 S305 ; Limit T2 to 305C
+M307 H3 R3.794 C30.400 D3.55 S1.00 V24.0 B0 ; Tuned T2 PID model
+M950 H4 C"duex.e3heat" T4 ; create heater #4
+M143 H4 S305 ; Limit T3 to 305C
+M307 H4 R2.429 C140.000 D5.50 S1.00 V24.0 B0 ; Tuned T3 PID model
 
 ; Heated beds
 M140 P0 H0 ; configure heated bed #0
